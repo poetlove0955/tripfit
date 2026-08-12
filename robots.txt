@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /kakao/
+Disallow: /naver/
+Sitemap: https://tripfit.pages.dev/sitemap.xml
