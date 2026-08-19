@@ -565,7 +565,11 @@ body{font-size:15.5px; letter-spacing:-.2px}
 .여정.켬{background:#fff; border-color:#fff; color:var(--잉크)}
 
 .칸들{display:grid; gap:8px; grid-template-columns:1fr}
-@media (min-width:900px){ .칸들{grid-template-columns:1.1fr 1.1fr .95fr .95fr} }
+@media (min-width:900px){
+  .칸들{grid-template-columns:1.1fr 1.1fr .95fr .95fr}
+  /* 항공은 칸이 셋이다 (출발지 · 목적지 · 날짜) — 넷짜리 자를 쓰면 빈 칸이 생긴다 */
+  #항공폼 .칸들{grid-template-columns:1.1fr 1.1fr 1.2fr}
+}
 .칸{display:flex; align-items:center; gap:11px; width:100%; min-width:0;
     background:#fff; border:1px solid transparent; border-radius:12px; height:60px;
     padding:0 15px; text-align:left; font-size:16.5px; font-weight:700; color:var(--글자)}
@@ -629,11 +633,8 @@ body{font-size:15.5px; letter-spacing:-.2px}
                  color:var(--브랜드); box-shadow:none}
 .도구 .세로칩 i{margin-left:4px}
 
-/* ── 날짜 창: 「기간에서 최저가」 / 「날짜 지정」 */
-.모드줄{display:flex; gap:6px; padding:0 18px 4px}
-.모드{flex:1; background:var(--줄무늬); border:1px solid var(--테두리); color:var(--보조);
-      padding:10px; border-radius:10px; font-size:14px; font-weight:700}
-.모드.켬{background:var(--브랜드연); border-color:var(--브랜드밝); color:var(--브랜드)}
+/* ── 날짜 창 밑줄의 작은 단추 — [적용] 옆에서 눈에 안 띄게 작다 */
+.작은연버튼{padding:6px 10px; font-size:12.5px; flex:none}
 
 /* ══════════════════════════ ⭐ BEST — 항공 + 숙소를 한 장에 */
 .베머리글{display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;
@@ -683,9 +684,6 @@ body{font-size:15.5px; letter-spacing:-.2px}
 #지정칸{display:flex; flex-direction:column; flex:1; min-height:0}
 #지정칸 #달속{flex:1; min-height:0}
 #유연칸{flex:none}
-/* 편도면 '오는 날' 칸은 아예 없앤다 */
-.폼.편도 #며칠칸{display:none}
-@media (min-width:900px){ .폼.편도 .칸들{grid-template-columns:1.1fr 1.1fr 1fr} }
 /* 손님용(미리 찾아 둔 값) 화면에는 대표용 도구를 안 보인다 */
 .손님용 .밑줄{display:none !important}
 .손님용 .별{display:none}
@@ -712,6 +710,38 @@ body{font-size:15.5px; letter-spacing:-.2px}
 /* 탭 — 글자만 두고 켠 것만 브랜드 색으로 */
 .탭{font-weight:700}
 .탭줄{gap:4px}
+
+/* ══════════════════════════════════════════════════════════════════════
+   2026-08-19 · 결과 머리 간소화 — "총 개수와 줄세우기만, 조건은 접어 둔다"
+
+   ⭐ PC·폰이 같은 규칙을 쓴다. 접이는 화면 폭과 상관없이 늘 접혀서 시작한다 —
+      좁은 화면에서만 접던 옛 '찾은 곳' 방식은 PC 에서 칩이 스무 개 깔렸다.
+   🛑 접힌 것은 **사라진 게 아니라 접힌 것**이라는 표시가 있어야 한다.
+      그래서 고른 조건이 있으면 단추 이름에 그대로 적는다 (조건 · 9월 · 3일).
+   ══════════════════════════════════════════════════════════════════════ */
+.도구{flex-direction:column; align-items:stretch; gap:0}
+.결과머리{display:flex; align-items:center; gap:10px; width:100%}
+/* 🛑 조건 이름이 길면 머리가 두 줄이 되고 [총 15개] 가 92px 로 찌그러진다(실측).
+   총 개수가 이 줄의 주인이다 — 밀리는 쪽은 늘 조건 단추여야 한다. */
+.결과머리 .결과글{flex:1 1 auto; min-width:0; margin-right:0;
+                  white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.접이단추{flex:0 1 auto; min-width:0; max-width:60%; white-space:nowrap;
+          overflow:hidden; text-overflow:ellipsis;
+          background:none; border:1px solid var(--진테두리);
+          color:var(--보조); border-radius:999px; padding:7px 13px;
+          font-size:13px; font-weight:700; display:flex; align-items:center; gap:6px}
+.접이단추:hover{border-color:var(--브랜드밝); color:var(--브랜드)}
+.접이단추.켬{background:var(--브랜드연); border-color:var(--브랜드밝); color:var(--브랜드)}
+.접이단추 i{font-style:normal; font-size:11px; transition:transform .2s}
+.접이단추.켬 i{transform:rotate(180deg)}
+.접이속{display:none; width:100%; margin-top:12px; padding-top:12px;
+        border-top:1px solid var(--테두리)}
+.접이속.폄{display:flex; flex-direction:column; gap:10px}
+.접이속 .도구단{width:100%}
+@media (max-width:900px){
+  .결과글{font-size:16px}
+  .접이단추{padding:6px 11px; font-size:12.5px}
+}
 </style>
 <meta name="description" content="서울 출발 인기 여행지의 항공권 값을 1년치 분포로 재서, 지금이 정말 싼 때인지 알려드립니다. 숙소는 가성비 순으로. 무료.">
 <meta name="robots" content="index,follow">
@@ -756,15 +786,15 @@ body{font-size:15.5px; letter-spacing:-.2px}
           <label class="칸"><span class="칸아이"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg></span><select id="출발지"></select></label>
           <button class="칸" id="목적지버튼" onclick="곳고르기열기()">
             <span class="칸아이"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></span><b>어디든지</b></button>
+          <!-- 날짜 칸 하나. 「며칠」은 없앴다 — 날짜를 고르면 거기서 일수가 나오고,
+               안 고르면 기간(6개월) 안의 모든 일정을 어차피 다 본다. -->
           <button class="칸" id="언제칸" onclick="달력열기()">
-            <span class="칸아이"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="17" rx="2.5"/><path d="M16 2.5v4M8 2.5v4M3 10h18"/></svg></span><b id="언제칸글">6개월 이내</b></button>
-          <button class="칸" id="며칠칸" onclick="달력열기()">
-            <span class="칸아이"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span><b id="며칠칸글">며칠이든</b></button>
+            <span class="칸아이"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="17" rx="2.5"/><path d="M16 2.5v4M8 2.5v4M3 10h18"/></svg></span><b id="언제칸글">날짜 지정 안 함</b></button>
         </div>
 
         <div class="폼줄">
           <button class="사람칸" id="사람단추" onclick="사람고르기열기()">여행객 1명</button>
-          <label class="스위치"><input type="checkbox" id="직항만"><i></i><span>직항만</span></label>
+          <label class="스위치"><input type="checkbox" id="직항만" checked><i></i><span>직항만</span></label>
           <button class="더단추" id="자세히머리" onclick="자세히접기()">세부 조건 ▾</button>
         </div>
 
@@ -791,8 +821,8 @@ body{font-size:15.5px; letter-spacing:-.2px}
           <button class="칸" id="숙목적지버튼" onclick="곳고르기열기('숙박')">
             <span class="칸아이"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></span><b>어디든지</b></button>
           <button class="칸" id="숙언제칸" onclick="달력열기('숙박')">
-            <span class="칸아이"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="17" rx="2.5"/><path d="M16 2.5v4M8 2.5v4M3 10h18"/></svg></span><b id="숙언제칸글">6개월 이내</b></button>
-          <button class="칸" id="숙며칠칸" onclick="달력열기('숙박')">
+            <span class="칸아이"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="17" rx="2.5"/><path d="M16 2.5v4M8 2.5v4M3 10h18"/></svg></span><b id="숙언제칸글">날짜 지정 안 함</b></button>
+          <button class="칸" id="숙며칠칸" onclick="달력열기('숙박','박')">
             <span class="칸아이"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span><b id="숙며칠칸글">1박</b></button>
           <button class="칸" id="숙사람칸" onclick="사람고르기열기('숙박')">
             <span class="칸아이"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><b id="숙사람칸글">성인 2명</b></button>
@@ -826,8 +856,8 @@ body{font-size:15.5px; letter-spacing:-.2px}
         <div class="칸들">
           <label class="칸"><span class="칸아이"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg></span><select id="베출발지"></select></label>
           <button class="칸" id="베언제칸" onclick="달력열기('베스트')">
-            <span class="칸아이"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="17" rx="2.5"/><path d="M16 2.5v4M8 2.5v4M3 10h18"/></svg></span><b id="베언제칸글">6개월 이내</b></button>
-          <button class="칸" id="베며칠칸" onclick="달력열기('베스트')">
+            <span class="칸아이"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="17" rx="2.5"/><path d="M16 2.5v4M8 2.5v4M3 10h18"/></svg></span><b id="베언제칸글">날짜 지정 안 함</b></button>
+          <button class="칸" id="베며칠칸" onclick="달력열기('베스트','박')">
             <span class="칸아이"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span><b id="베며칠칸글">1박</b></button>
           <button class="칸" id="베사람칸" onclick="사람고르기열기('베스트')">
             <span class="칸아이"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><b id="베사람칸글">성인 2명</b></button>
@@ -859,22 +889,27 @@ body{font-size:15.5px; letter-spacing:-.2px}
         <div class="로그" id="로그칸" style="display:none"></div>
       </div>
 
+      <!-- 🛑 결과 머리에는 **총 개수와 줄세우기 이름** 두 마디만 둔다. 나머지(지역·월·일수)는
+           눌러서 펴는 자리다 — 칩이 스무 개 깔린 화면을 손님은 '고르라는 숙제'로 읽는다. -->
       <div class="도구" id="도구줄" style="display:none">
-        <div class="도구단">
+        <div class="도구단 결과머리">
           <span class="결과글" id="결과글"></span>
-          <div class="칩줄" id="정렬칩"></div>
+          <button class="접이단추" id="조건단추" onclick="조건칩접기()">조건 <i>▾</i></button>
         </div>
-        <div id="지역줄" style="display:none">
-          <div class="지역머리" id="지역머리" onclick="지역접기()">
-            <span class="쪽제목" style="margin:0">지역</span>
-            <span class="지역요약" id="지역요약"></span>
-            <span class="지역화살" id="지역화살">▴</span>
+        <div class="접이속" id="조건속">
+          <div class="도구단"><div class="칩줄" id="정렬칩"></div></div>
+          <div id="지역줄" style="display:none">
+            <div class="지역머리" id="지역머리" onclick="지역접기()">
+              <span class="쪽제목" style="margin:0">지역</span>
+              <span class="지역요약" id="지역요약"></span>
+              <span class="지역화살" id="지역화살">▴</span>
+            </div>
+            <div class="지역감" id="지역감"><div id="지역칩"></div></div>
           </div>
-          <div class="지역감" id="지역감"><div id="지역칩"></div></div>
-        </div>
-        <div class="도구단">
-          <div class="칩줄" id="달칩"></div>
-          <div class="칩줄" id="박칩"></div>
+          <div class="도구단">
+            <div class="칩줄" id="달칩"></div>
+            <div class="칩줄" id="박칩"></div>
+          </div>
         </div>
       </div>
 
@@ -912,12 +947,15 @@ body{font-size:15.5px; letter-spacing:-.2px}
       <!-- 🛑 칩 차례가 곧 '무엇부터 보라'는 말이다. 줄 세우는 자(정렬)를 먼저 놓고
            그다음에 갈래(종류)를 놓는다 — 종류가 앞에 있으면 정렬이 안 보인다. -->
       <div class="도구" id="숙도구줄" style="display:none">
-        <div class="도구단">
+        <div class="도구단 결과머리">
           <span class="결과글" id="숙결과글"></span>
-          <div class="칩줄" id="숙정렬칩"></div>
+          <button class="접이단추" id="숙조건단추" onclick="숙조건칩접기()">조건 <i>▾</i></button>
         </div>
-        <div class="도구단"><div class="칩줄" id="숙종류칩"></div></div>
-        <div id="숙지역줄" style="display:none"><div id="숙지역칩"></div></div>
+        <div class="접이속" id="숙조건속">
+          <div class="도구단"><div class="칩줄" id="숙정렬칩"></div></div>
+          <div class="도구단"><div class="칩줄" id="숙종류칩"></div></div>
+          <div id="숙지역줄" style="display:none"><div id="숙지역칩"></div></div>
+        </div>
       </div>
       <div class="뺀줄" id="숙뺀줄" style="display:none"></div>
 
@@ -998,29 +1036,16 @@ body{font-size:15.5px; letter-spacing:-.2px}
   </div>
 </div>
 
-<!-- ─────────────────────────── 날짜 (기간에서 고르거나, 날짜를 짚거나)
-     ⭐ 우리 자료는 **기간을 통째로 훑어 둔 것**이다. 그래서 기본은 「기간에서 최저가」다.
-        날짜가 정해진 손님만 [날짜 지정] 으로 넘어간다 — 두 길을 한 창에 둔 이유. -->
+<!-- ─────────────────────────── 날짜
+     ⭐ 창을 열면 **달력이 먼저** 나온다 — 여기 온 손님은 날짜를 짚으러 온 것이다.
+        날짜가 없어도 되는 손님만 밑의 작은 [날짜 지정 안 함] 으로 빠진다
+        (그러면 우리가 미리 훑어 둔 6개월 전체에서 제일 싼 날을 찾아 준다). -->
 <div class="덮개" id="달덮개">
   <div class="상자" style="width:min(460px,100%)">
     <div class="상자머리"><b id="달제목">여행 일정</b>
       <button class="닫기" onclick="닫기('달덮개')">×</button></div>
 
-    <div class="모드줄">
-      <button class="모드 켬" id="모드유연" onclick="달모드('유연')">기간에서 최저가</button>
-      <button class="모드" id="모드지정" onclick="달모드('지정')">날짜 지정</button>
-    </div>
-
-    <div class="상자속" id="유연칸">
-      <div class="쪽제목" style="margin-top:0">기간</div>
-      <div class="칩줄" id="기간칩"></div>
-      <div id="며칠고르기">
-        <div class="쪽제목">며칠</div>
-        <div class="칩줄" id="박수칩"></div>
-      </div>
-    </div>
-
-    <div id="지정칸" style="display:none">
+    <div id="지정칸">
       <div class="달머리">
         <div class="달칸" id="달칸시"><span>가는 날</span><b id="달시">눌러주세요</b></div>
         <div class="달사이"><i id="달박">—</i></div>
@@ -1033,8 +1058,16 @@ body{font-size:15.5px; letter-spacing:-.2px}
       <div class="상자속" id="달속" style="padding-top:6px"></div>
     </div>
 
+    <!-- 날짜를 안 정할 때만 쓰는 칸 — 숙소·BEST 는 며칠 묵을지는 있어야 한다 -->
+    <div class="상자속" id="유연칸" style="display:none">
+      <div class="쪽제목" style="margin-top:0">며칠 묵으시나요</div>
+      <div class="칩줄" id="박수칩"></div>
+      <p class="사람말" id="유연말">날짜는 정하지 않습니다 — 앞으로 6개월 안에서 가장 저렴한 날을 찾아 드립니다.</p>
+    </div>
+
     <div class="상자밑">
-      <button class="연버튼" id="달지움" onclick="달지우기()">지우기</button>
+      <button class="연버튼 작은연버튼" id="달모드단추" onclick="달모드바꾸기()">날짜 지정 안 함</button>
+      <button class="연버튼 작은연버튼" id="달지움" onclick="달지우기()">지우기</button>
       <button class="큰버튼" id="달확인" style="flex:1" onclick="달정하기()">적용</button>
     </div>
   </div>
@@ -1063,9 +1096,9 @@ body{font-size:15.5px; letter-spacing:-.2px}
   </div>
 </div>
 
-<script src="정적.js?v=20260819204528"></script>
-<script src="로그인.js?v=20260819204528"></script>
-<script src="보고.js?v=20260819204528"></script>
+<script src="정적.js?v=20260819214848"></script>
+<script src="로그인.js?v=20260819214848"></script>
+<script src="보고.js?v=20260819214848"></script>
 <script>
 /* 주소 밑동 — '/' 에 있든 '/tripfit/' 에 얹혀 있든 같은 코드로 돈다 */
 const 밑 = location.pathname.endsWith('/') ? location.pathname : location.pathname + '/';
@@ -1208,7 +1241,9 @@ function 정한날() {                    // [가는날, 오는날, 박] — 안
   const 시 = $('#시작날').value, 끝 = $('#끝날').value;
   if (!시 || !끝) return null;
   const 박 = 날수(시, 끝);
-  return (박 >= 1 && 박 <= 30) ? [시, 끝, 박] : null;
+  /* 🛑 편도는 0(가는 날만)도 정해진 것이다. 왕복까지 0 을 받아 주면
+     편도로 고른 뒤 왕복으로 되돌렸을 때 '9/4 → 9/4' 같은 0일 여행이 남는다. */
+  return (박 >= ($('#편도').checked ? 0 : 1) && 박 <= 30) ? [시, 끝, 박] : null;
 }
 /* 며칠 다녀오나. 🛑 여기 값은 공장이 미리 훑어 둔 **박 버킷과 1:1** 이어야 한다 —
    어긋나면 손님은 "찾았는데 아무것도 없다"만 보고 이유를 모른다. */
@@ -1221,36 +1256,41 @@ function 며칠값() {
 
 /* ── 달력 하나로 가는 날·오는 날을 한 번에 (첫 번째 누름 = 가는 날, 두 번째 = 오는 날) */
 let 임시시 = '', 임시끝 = '';
-let 달모드값 = '유연', 임시기간 = '석달', 임시박 = '*';
+/* 창은 늘 달력('지정')으로 연다. '유연' 은 [날짜 지정 안 함] 으로만 들어간다. */
+let 달모드값 = '지정', 임시기간 = '여섯달', 임시박 = '*';
+/* 기간 고르기는 없앴다 — 안 정하면 늘 '여섯달'(우리가 훑어 둔 전부)이다.
+   목록을 남겨 두는 건 예전에 골라 둔 값이 남아 있을 때 글자를 뽑기 위해서다. */
 const 기간항목 = [['2주 이내', '2주'], ['1개월 이내', '한달'],
-                  ['3개월 이내', '석달'], ['6개월 이내', '여섯달']];
-const 항공박항목 = [['당일치기', '0'], ['1박', '1'], ['2박', '2'], ['3박', '3'],
-                    ['4~6박', '4-6'], ['일주일', '6-8'], ['며칠이든', '*']];
+                  ['3개월 이내', '석달'], ['날짜 지정 안 함', '여섯달']];
 const 숙박박항목 = [['1박', '1'], ['2박', '2'], ['3박', '3'], ['5박', '5'], ['7박', '7']];
 
-function 기간글(값) { const 짝 = 기간항목.find(x => x[1] === 값); return 짝 ? 짝[0] : '6개월 이내'; }
-function 박글(값) { const 짝 = 항공박항목.find(x => x[1] === String(값)); return 짝 ? 짝[0] : '며칠이든'; }
+function 기간글(값) { const 짝 = 기간항목.find(x => x[1] === 값); return 짝 ? 짝[0] : '날짜 지정 안 함'; }
 function 긴날(iso) {
   const [y, m, d] = iso.split('-').map(Number);
   return `${m}월 ${d}일 (${'일월화수목금토'[new Date(y, m - 1, d).getDay()]})`;
 }
 
-function 달력열기(갈래) {
+/* 어디 === '박' 이면 [며칠 묵나] 칸을 누른 것이다 (숙소·BEST 에만 있다).
+   그 외에는 **늘 달력부터** 연다 — 날짜를 지정하러 누른 것이니까. */
+function 달력열기(갈래, 어디) {
   모달갈래 = 갈래 || '항공';
+  /* 🛑 날짜를 안 정한 칸(여섯달)인데 달력에 날짜가 미리 칠해져 있으면,
+     손님은 고르지도 않은 날이 이미 정해진 줄 안다 — 그때는 빈 달력으로 연다. */
   if (모달갈래 === '숙박') {
-    임시시 = 숙시작; 임시끝 = 숙끝;
-    임시기간 = (숙언제값 === '직접') ? '여섯달' : 숙언제값; 임시박 = String(숙박값);
-    달모드값 = (숙언제값 === '직접' && 숙시작) ? '지정' : '유연';
+    const 직 = (숙언제값 === '직접');
+    임시시 = 직 ? 숙시작 : ''; 임시끝 = 직 ? 숙끝 : '';
+    임시기간 = '여섯달'; 임시박 = String(숙박값);
   } else if (모달갈래 === '베스트') {
-    임시시 = 베시작; 임시끝 = 베끝;
-    임시기간 = (베언제값 === '직접') ? '여섯달' : 베언제값; 임시박 = String(베박값);
-    달모드값 = (베언제값 === '직접' && 베시작) ? '지정' : '유연';
+    const 직 = (베언제값 === '직접');
+    임시시 = 직 ? 베시작 : ''; 임시끝 = 직 ? 베끝 : '';
+    임시기간 = '여섯달'; 임시박 = String(베박값);
   } else {
     임시시 = (언제값 === '직접') ? ($('#시작날').value || '') : '';
     임시끝 = (언제값 === '직접') ? ($('#끝날').value || '') : '';
     임시기간 = (언제값 === '직접') ? '여섯달' : 언제값; 임시박 = 박칸;
-    달모드값 = (언제값 === '직접') ? '지정' : '유연';
   }
+  // 날짜가 이미 정해져 있으면 [며칠] 을 눌러도 달력을 연다 — 박수는 날짜에서 나오니까
+  달모드값 = (어디 === '박' && 모달갈래 !== '항공' && !임시시) ? '유연' : '지정';
   달창그리기(); 열기('달덮개');
   // 골라 둔 달이 바로 보이게 (안 그러면 늘 첫 달부터 내려야 한다)
   const 속 = $('#달속');
@@ -1260,29 +1300,33 @@ function 달력열기(갈래) {
 
 function 달모드(m) { 달모드값 = m; 달창그리기(); }
 
+/* 밑줄의 작은 단추. 항공은 고를 게 없으니 **누르는 즉시 적용**하고 창을 닫는다.
+   숙소·BEST 는 날짜를 안 정해도 '며칠 묵나'는 있어야 해서 그 칸으로 넘어간다. */
+function 달모드바꾸기() {
+  if (달모드값 === '지정') {
+    if (모달갈래 === '항공') {
+      언제값 = '여섯달'; 박칸 = '*'; $('#시작날').value = ''; $('#끝날').value = '';
+      닫기('달덮개'); 요약갱신(); return;
+    }
+    임시기간 = '여섯달'; 달모드('유연');
+  } else 달모드('지정');
+}
+
 function 달창그리기() {
   const 숙 = (모달갈래 !== '항공');
   $('#달제목').textContent = 숙 ? '숙박 일정' : '여행 일정';
-  $('#모드유연').classList.toggle('켬', 달모드값 === '유연');
-  $('#모드지정').classList.toggle('켬', 달모드값 === '지정');
-  $('#유연칸').style.display = (달모드값 === '유연') ? '' : 'none';
-  $('#지정칸').style.display = (달모드값 === '지정') ? '' : 'none';
-  $('#달지움').style.display = (달모드값 === '지정') ? '' : 'none';
-  if (달모드값 === '유연') 유연그리기(); else 달력그리기();
+  const 지정 = (달모드값 === '지정');
+  $('#유연칸').style.display = 지정 ? 'none' : '';
+  $('#지정칸').style.display = 지정 ? '' : 'none';
+  $('#달지움').style.display = (지정 && (임시시 || 임시끝)) ? '' : 'none';
+  $('#달모드단추').textContent = 지정 ? '날짜 지정 안 함' : '날짜 지정하기';
+  if (지정) 달력그리기(); else 유연그리기();
   달확인갱신();
 }
 
 function 유연그리기() {
-  const 편도 = (모달갈래 === '항공') && $('#편도').checked;
-  $('#기간칩').innerHTML = 기간항목.map(([g, v]) =>
-    `<button class="칩${v === 임시기간 ? ' 켬' : ''}" data-v="${v}">${g}</button>`).join('');
-  $('#기간칩').querySelectorAll('.칩').forEach(b =>
-    b.onclick = () => { 임시기간 = b.dataset.v; 유연그리기(); });
-
-  $('#며칠고르기').style.display = 편도 ? 'none' : '';
-  const 항목 = (모달갈래 === '항공') ? 항공박항목 : 숙박박항목;
-  if (!항목.some(x => x[1] === 임시박)) 임시박 = (모달갈래 === '항공') ? '*' : '2';
-  $('#박수칩').innerHTML = 항목.map(([g, v]) =>
+  if (!숙박박항목.some(x => x[1] === 임시박)) 임시박 = '2';
+  $('#박수칩').innerHTML = 숙박박항목.map(([g, v]) =>
     `<button class="칩${v === 임시박 ? ' 켬' : ''}" data-v="${v}">${g}</button>`).join('');
   $('#박수칩').querySelectorAll('.칩').forEach(b =>
     b.onclick = () => { 임시박 = b.dataset.v; 유연그리기(); });
@@ -1320,9 +1364,11 @@ function 달하나(y, m, 오늘) {
 function 날눌림(iso) {
   if (!임시시 || 임시끝 || iso <= 임시시) { 임시시 = iso; 임시끝 = ''; }
   else 임시끝 = iso;
-  달력그리기();
+  const 속 = $('#달속'), 자리 = 속.scrollTop;   // 다시 그려도 보던 달에 그대로 머물게
+  달창그리기();
+  속.scrollTop = 자리;
 }
-function 달지우기() { 임시시 = ''; 임시끝 = ''; 달력그리기(); 달확인갱신(); }
+function 달지우기() { 임시시 = ''; 임시끝 = ''; 달창그리기(); }
 
 /* 창 아래 [적용] 과 위쪽 두 칸(가는 날·오는 날)의 상태를 한 자리에서 맞춘다.
    🛑 편도는 '오는 날' 없이도 적용된다 — 없는 칸을 기다리면 단추가 영영 안 켜진다. */
@@ -1338,7 +1384,8 @@ function 달확인갱신() {
   $('#달칸끝 span').textContent = 숙 ? '체크아웃' : '오는 날';
   $('#달시').textContent = 임시시 ? 짧은날(임시시) : '눌러주세요';
   $('#달끝').textContent = 임시끝 ? 짧은날(임시끝) : (임시시 ? '눌러주세요' : '—');
-  $('#달박').textContent = (임시시 && 임시끝) ? `${날수(임시시, 임시끝)}박` : '—';
+  $('#달박').textContent = (임시시 && 임시끝)
+    ? ((모달갈래 === '항공') ? `${날수(임시시, 임시끝)}일` : `${날수(임시시, 임시끝)}박`) : '—';
   // 지금 고를 차례인 칸을 켜 둔다 — 어디를 눌러야 하는지 눈으로 알게
   $('#달칸시').className = '달칸' + (임시시 ? '' : ' 차례 빔');
   $('#달칸끝').className = '달칸' + (임시끝 ? '' : (임시시 ? ' 차례 빔' : ' 빔'));
@@ -1352,9 +1399,10 @@ function 달정하기() {
     else if (모달갈래 === '베스트') { 베언제값 = '직접'; 베시작 = 임시시; 베끝 = 끝; }
     else { 언제값 = '직접'; $('#시작날').value = 임시시; $('#끝날').value = 끝; }
   } else {
-    if (모달갈래 === '숙박')      { 숙언제값 = 임시기간; 숙박값 = +임시박; 숙시작 = ''; 숙끝 = ''; }
-    else if (모달갈래 === '베스트') { 베언제값 = 임시기간; 베박값 = +임시박; 베시작 = ''; 베끝 = ''; }
-    else { 언제값 = 임시기간; 박칸 = 임시박; }
+    /* 날짜를 안 정한 길. 기간은 늘 '여섯달'(우리가 훑어 둔 전부)이다. */
+    if (모달갈래 === '숙박')      { 숙언제값 = '여섯달'; 숙박값 = +임시박; 숙시작 = ''; 숙끝 = ''; }
+    else if (모달갈래 === '베스트') { 베언제값 = '여섯달'; 베박값 = +임시박; 베시작 = ''; 베끝 = ''; }
+    else { 언제값 = '여섯달'; 박칸 = '*'; $('#시작날').value = ''; $('#끝날').value = ''; }
   }
   닫기('달덮개');
   if (모달갈래 === '숙박') 숙요약갱신();
@@ -1371,14 +1419,16 @@ function 목적지글() {
   const 목 = [...고른곳];
   return 목.length <= 2 ? 목.join(' · ') : `${목[0]} 외 ${목.length - 1}곳`;
 }
+/* 날짜 칸에 적을 한 줄. 세 갈래다 —
+   ① 다 정함 ② 가는 날만 정하고 오는 날이 빈 채로 왕복이 됨 ③ 아예 안 정함 */
 function 언제글() {
-  const 정 = 정한날();
-  return 정 ? `${짧은날(정[0])} → ${짧은날(정[1])}` : 기간글(언제값);
+  const 정 = 정한날(), 편도 = $('#편도').checked;
+  if (정) return 편도 ? 짧은날(정[0]) : `${짧은날(정[0])} → ${짧은날(정[1])}`;
+  const 시 = (언제값 === '직접') ? $('#시작날').value : '';
+  return 시 ? `${짧은날(시)} → 오는 날 고르기` : 기간글(언제값);
 }
-function 며칠글() {
-  const 정 = 정한날();
-  return 정 ? `${정[2]}박 ${정[2] + 1}일` : 박글(박칸);
-}
+// 🛑 화면이 두 말을 쓰면 헷갈린다 — 항공은 **일**로 통일
+function 며칠글() { const 정 = 정한날(); return 정 ? `${정[2]}일` : '왕복'; }
 function 조건말() {
   const 편도 = $('#편도').checked;
   const 정 = 정한날();
@@ -1386,16 +1436,13 @@ function 조건말() {
   const 기본객 = (여행객.성인 === 1 && !여행객.아이나이.length
                 && 여행객.좌석 === ((메타.좌석 || ['일반석'])[0]));
   return `${$('#출발지').value} → ${목적지글()}\n`
-       + `${언제글()}${정 ? '' : ' 출발'} · ${편도 ? '편도' : 며칠글()}`
+       + `${언제글()} · ${편도 ? '편도' : 며칠글()}`
        + (기본객 ? '' : `\n${사람글()} · ${여행객.좌석}`);
 }
 function 요약갱신() {
   $('#목적지버튼').querySelector('b').textContent = 목적지글();
-  const 직접 = (언제값 === '직접');
-  $('#언제칸글').textContent = (직접 && $('#시작날').value) ? 긴날($('#시작날').value)
-                                                          : 기간글(언제값);
-  $('#며칠칸글').textContent = (직접 && $('#끝날').value) ? 긴날($('#끝날').value)
-                                                        : 박글(박칸);
+  /* 칸이 하나라 가는 날·오는 날을 한 줄에 같이 적는다 */
+  $('#언제칸글').textContent = 언제글();
   사람단추갱신();
 }
 
@@ -1409,11 +1456,19 @@ function 곳고르기열기(갈래) {
   곳목록그리기();
   열기('곳덮개');
 }
+/* 나라 묶음이 나오는 차례 — 실제로 많이 가는 순서다.
+   🛑 자료(항공검색설정.json)에 적힌 차례를 그대로 쓰면 도시를 하나 더할 때마다
+      화면 순서가 멋대로 바뀐다. 그래서 여기 한 줄이 순서의 진실이다. */
+const 나라차례 = ['베트남', '태국·말레이·싱가포르', '일본',
+                  '필리핀·인니·기타', '중국·대만·홍콩'];
+const 나라번호 = g => { const i = 나라차례.indexOf(g); return i < 0 ? 99 : i; };
+
 function 곳목록그리기() {
   const 지역별 = {};
   (모달갈래 === '숙박' ? (숙메타.도시 || []) : 메타.목적지)
     .forEach(c => (지역별[c.지역] = 지역별[c.지역] || []).push(c));
-  const 묶음 = Object.entries(지역별);
+  const 묶음 = Object.entries(지역별)
+    .sort((a, b) => 나라번호(a[0]) - 나라번호(b[0]) || a[0].localeCompare(b[0], 'ko'));
   const 속 = $('#곳덮개 .상자속');
   const 스크롤 = 속 ? 속.scrollTop : 0;               // 나라 단추를 눌러도 자리를 안 잃게
 
@@ -1638,6 +1693,12 @@ function 안내갱신(일) {
 
 async function 찾기() {
   if (도는중) return;
+  /* 🛑 가는 날만 정해진 왕복은 0일짜리 여행이라 서버가 아무것도 못 찾는다 —
+     "찾았는데 없습니다" 대신 어디를 눌러야 하는지 알려 준다. */
+  if (언제값 === '직접' && !정한날()) {
+    $('#상태').textContent = '오는 날을 골라 주세요.';
+    달력열기(); return;
+  }
   바쁨(true);
   담은 = []; 펼친 = null; 보이는수 = 30; 지역값 = '*'; 달값 = '*';
   비행보이기(true);
@@ -1697,14 +1758,12 @@ function 결과받음(결과, 앞말) {
   비행보이기(false);                    // 다 찾았으니 안내 칸은 스스로 사라진다
   줄들 = 결과.줄 || [];
   const 싼 = 결과.제일싼;
-  /* 🛑 '📦 …에 찾아 둔 값입니다' 는 화면 맨 위 띠가 이미 하고 있는 말이다.
-     여기서는 그 앞에 붙는 **조건이 바뀌었다는 알림**만 남긴다 (없으면 아무 말도 안 한다). */
+  /* 🛑 (2026-08-19) '아시아 53곳 · 미리 찾아 둔 값 · 0.1초 · 특가 12건 · 최저 …' 를 다 뺐다.
+     손님이 알고 싶은 건 **몇 개 나왔나**뿐이고 그건 바로 아래 결과 머리가 말한다.
+     여기 남는 건 **조건이 바뀌었다는 알림 하나**다 — 없으면 아무 말도 안 한다.
+     (없앤 말: 어떻게 찾았나 · 몇 초 걸렸나 · 특가 몇 건 · 최저가 얼마) */
   const 알림 = String(앞말 || '').split('📦')[0].trim().replace(/·$/, '').trim();
-  $('#상태').innerHTML =
-    (알림 ? `<b>${홑(알림)}</b> · ` : '') +
-    `${홑(결과.어떻게)} · ${결과.걸린}초` +
-    (결과.특가수 ? ` · 특가 ${결과.특가수}건` : '') +
-    (싼 ? ` · 최저 ${홑(싼.목적지)} ${돈(싼.가격)}원` : '');
+  $('#상태').innerHTML = 알림 ? `<b>${홑(알림)}</b>` : '';
   조건접기(false);
   지역칩만들기(); 달칩만들기(); 박칩만들기(); 정렬칩만들기();
   $('#도구줄').style.display = 'flex';
@@ -1764,7 +1823,7 @@ function 박칩만들기() {
                 .sort((a, b) => a - b);
   if (박들.length < 2) { $('#박칩').innerHTML = ''; 박값 = '*'; return; }
   if (박값 !== '*' && !박들.includes(+박값)) 박값 = '*';
-  const 항목 = [['박수 상관없음', '*']].concat(박들.map(n => [`${n}박`, String(n)]));
+  const 항목 = [['일수 상관없음', '*']].concat(박들.map(n => [`${n}일`, String(n)]));
   $('#박칩').innerHTML = 항목.map(([글, 값]) =>
     `<button class="칩${값 === 박값 ? ' 켬' : ''}" data-v="${값}">${글}</button>`).join('');
   $('#박칩').querySelectorAll('.칩').forEach(b => b.onclick = () => {
@@ -1772,13 +1831,35 @@ function 박칩만들기() {
   });
 }
 
+/* 🛑 이 목록은 칩과 **결과 머리의 글자**가 같이 쓴다 — 한 자리에 둬야 둘이 안 어긋난다 */
+const 정렬항목 = [['최저가순', '값'], ['특가순', '특가'], ['절약순', '절약'], ['출발일순', '날짜']];
+const 정렬글 = v => (정렬항목.find(x => x[1] === v) || 정렬항목[0])[0];
+
 function 정렬칩만들기() {
-  const 항목 = [['최저가순', '값'], ['특가순', '특가'], ['절약순', '절약'], ['출발일순', '날짜']];
-  $('#정렬칩').innerHTML = 항목.map(([글, 값]) =>
+  $('#정렬칩').innerHTML = 정렬항목.map(([글, 값]) =>
     `<button class="칩${값 === 정렬값 ? ' 켬' : ''}" data-v="${값}">${글}</button>`).join('');
   $('#정렬칩').querySelectorAll('.칩').forEach(b => b.onclick = () => {
     정렬값 = b.dataset.v; 보이는수 = 30; 펼친 = null; 정렬칩만들기(); 그리기();
   });
+}
+
+/* ── 조건 접이 (항공) — 지역·월·일수 칩을 접어 둔다.
+   🛑 접어 두면 "내가 뭘 걸어 놨는지" 를 잃는다. 그래서 걸린 조건은 단추 이름에 적는다. */
+let 조건폄 = false;
+function 조건칩접기(켤까) {
+  조건폄 = (켤까 === undefined) ? !조건폄 : !!켤까;
+  $('#조건속').classList.toggle('폄', 조건폄);
+  $('#조건단추').classList.toggle('켬', 조건폄);
+}
+function 조건줄임(건) {          // 두 개까지만 적는다 — 세 개를 다 적으면 머리가 두 줄이 된다
+  if (!건.length) return '조건';
+  return '조건 · ' + (건.length <= 2 ? 건.join(' · ') : `${건[0]} 외 ${건.length - 1}`);
+}
+function 조건단추갱신() {
+  const 건 = [지역값 === '*' ? '' : 지역값,
+              달값 === '*' ? '' : `${parseInt(달값.slice(4, 6))}월`,
+              박값 === '*' ? '' : `${박값}일`].filter(Boolean);
+  $('#조건단추').innerHTML = 홑(조건줄임(건)) + ' <i>▾</i>';
 }
 
 function 날짜보기(d) {
@@ -1808,10 +1889,11 @@ function 그리기() {
   else 목.sort((a, b) => 보일값(a) - 보일값(b));
   보임 = 목;
 
-  const 앞말 = [지역값 === '*' ? '' : 지역값,
-                달값 === '*' ? '' : `${parseInt(달값.slice(4,6))}월`].filter(Boolean).join(' · ');
+  /* 🛑 (2026-08-19) 결과 머리는 **두 마디**다 — 총 몇 개인가, 무슨 순서인가.
+     고른 조건(지역·월·일수)은 여기 늘어놓지 않고 [조건] 단추 이름으로 간다. */
   $('#결과글').textContent = 목.length
-    ? (앞말 ? 앞말 + ' · ' : '') + `${목.length}개` : '결과 없음';
+    ? `총 ${목.length}개 · ${정렬글(정렬값)}` : '결과 없음';
+  조건단추갱신();
 
   if (!목.length) {
     빈화면('조건에 맞는 항공권이 없습니다 — 기간이나 예산을 넓혀 보세요');
@@ -1839,7 +1921,7 @@ function 카드(r, i, 싼값) {
     + (법 ? `<span class="딱지 법">${홑(법)}</span>` : '');
   const 정보 = [
     날짜보기(r.가는날) + (r.오는날 ? ' → ' + 날짜보기(r.오는날) : '') +
-      (r.박 !== null && r.박 !== undefined ? ` · ${r.박}박` : ''),
+      (r.박 !== null && r.박 !== undefined ? ` · ${r.박}일` : ''),
     r.경유 === 0 ? '직항' : (r.경유 ? `경유 ${r.경유}회` : ''),
     홑((r.항공사 || '').split(',')[0].trim()),
   ].filter(Boolean).join('  ·  ');
@@ -2259,14 +2341,10 @@ function 숙결과받음(결과, 앞말) {
   const 소 = 결과.소스별 || {};
   const 소글 = Object.keys(소).filter(k => k !== '값을 견준 곳' && 소[k])
                  .map(k => `${k} ${소[k]}`).join(' · ');
+  /* 🛑 (2026-08-19) 항공과 같은 규칙 — 어떻게 찾았나·몇 초·특가 몇 건·찾아본 곳은 다 뺐다.
+     남는 건 조건이 바뀌었다는 알림 하나뿐이다. (숙 · 소글 · 날말은 이제 안 쓴다) */
   const 숙알림 = String(앞말 || '').split('📦')[0].trim().replace(/·$/, '').trim();
-  $('#숙상태').innerHTML =
-    (숙알림 ? `<b>${홑(숙알림)}</b> · ` : '') +
-    `${홑(결과.어떻게)} · ${결과.걸린}초` +
-    (결과.특가수 ? ` · 특가 ${결과.특가수}건` : '') +
-    (싼 ? ` · 최저 1박 ${돈(싼['1박'])}원 (${홑(싼.목적지)})` : '') + 날말 +
-    (소글 ? `<div style="font-size:12px;color:var(--연보조);margin-top:4px">
-       찾아본 곳 — ${홑(소글)}${소['값을 견준 곳'] ? ` · 같은 숙소 값을 견준 곳 ${소['값을 견준 곳']}건` : ''}</div>` : '');
+  $('#숙상태').innerHTML = 숙알림 ? `<b>${홑(숙알림)}</b>` : '';
   숙지역칩만들기(); 숙종류칩만들기(); 숙정렬칩만들기();
   $('#숙도구줄').style.display = 'flex';
   숙그리기();
@@ -2277,11 +2355,29 @@ function 숙결과받음(결과, 앞말) {
    disabled 를 걸었는데, 손님 눈에는 '있는데 안 눌리는 버튼' 이고 왜 안 되는지 알 길이 없다.
    추천은 **줄 세우는 자**다 — 추천할 만한 게 없으면 목록이 비는 게 아니라
    순위 밖 숙소들이 아래로 내려갈 뿐이다. 그러니 늘 눌린다. */
+/* 결과 머리가 같이 읽는 목록 — 칩 이름과 머리 글자가 어긋나면 안 된다 */
+const 숙정렬항목 = [['TripFit 추천', '추천'], ['가성비순', '가성비'], ['최저가순', '값'],
+                    ['특가순', '특가'], ['후기순', '후기'], ['역세권순', '위치']];
+const 숙정렬글 = v => (숙정렬항목.find(x => x[1] === v) || 숙정렬항목[0])[0];
+
+/* ── 조건 접이 (숙소) */
+let 숙조건폄 = false;
+function 숙조건칩접기(켤까) {
+  숙조건폄 = (켤까 === undefined) ? !숙조건폄 : !!켤까;
+  $('#숙조건속').classList.toggle('폄', 숙조건폄);
+  $('#숙조건단추').classList.toggle('켬', 숙조건폄);
+}
+function 숙조건단추갱신() {
+  const 건 = [숙곳값 === '*' ? '' : 숙곳값,
+              숙종류값 === '*' ? '' : 숙종류값,
+              숙제외.size ? `${숙제외.size}종류 제외` : ''].filter(Boolean);
+  $('#숙조건단추').innerHTML = 홑(조건줄임(건)) + ' <i>▾</i>';
+}
+
 function 숙정렬칩만들기() {
   const 추 = 숙줄들.filter(r => (r.추천등급 || 0) > 0).length;
-  const 항목 = [['TripFit 추천' + (추 ? ` ${추}` : ''), '추천'],
-                ['가성비순', '가성비'], ['최저가순', '값'], ['특가순', '특가'],
-                ['후기순', '후기'], ['역세권순', '위치']];
+  const 항목 = 숙정렬항목.map(([g, v]) =>
+    [v === '추천' && 추 ? `${g} ${추}` : g, v]);
   $('#숙정렬칩').innerHTML = 항목.map(([g, v]) =>
     `<button class="칩${v === 숙정렬값 ? ' 켬' : ''}${v === '추천' ? ' 추천칩' : ''}"
              data-v="${v}">${홑(g)}</button>`).join('');
@@ -2387,14 +2483,9 @@ function 숙그리기() {
   }
   숙보임 = 목;
 
-  const 추천수 = 목.filter(r => (r.추천등급 || 0) > 0).length;
-  $('#숙결과글').textContent =
-    (목.length
-      ? (숙정렬값 === '추천'
-          ? `${목.length}곳 · 추천 ${추천수}곳`
-          : `${목.length}곳`)
-      : '결과 없음')
-    + (뺀수 ? ` · ${뺀수}곳 제외` : '');
+  $('#숙결과글').textContent = 목.length
+    ? `총 ${목.length}곳 · ${숙정렬글(숙정렬값)}` : '결과 없음';
+  숙조건단추갱신();
   if (!목.length) {
     숙빈화면('조건에 맞는 숙소가 없습니다 — 예산이나 후기 조건을 넓혀 보세요');
     return;
