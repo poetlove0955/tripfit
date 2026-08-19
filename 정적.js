@@ -24,6 +24,12 @@
 (function () {
   'use strict';
 
+  /* 화면(트립핏웹.html)에게 "너는 지금 미리 찾아 둔 값으로 돌고 있다"고 알린다.
+     🛑 화면은 이 표시를 보고 **대표용 도구(★ 담기·콘텐츠 만들기)를 감춘다** —
+        여기서 501 로 막아 두긴 했지만, 눌러도 안 되는 단추가 보이는 것 자체가
+        손님 눈에는 '고장난 사이트'다. (같은 이유로 공장이 [🔒 코드]를 지운다) */
+  window.TF미리찾음 = true;
+
   var 밑 = location.pathname.replace(/[^/]*$/, '');   // …/ 로 끝나는 현재 폴더
   var 데이터 = 밑 + 'data/';
   var _fetch = window.fetch.bind(window);
@@ -315,10 +321,10 @@
       차림표 = 표;
       var 띠 = document.createElement('div');
       띠.setAttribute('style',
-        'background:#e6f4f6;color:#0d697c;font-size:12.5px;font-weight:600;' +
-        'padding:6px 16px;text-align:center;border-bottom:1px solid #bfe3e8');
-      띠.textContent = '🕘 ' + (표.만든글 || '') + ' 에 찾아 둔 값입니다 · '
-                     + '실제 값은 예약처에서 다시 확인해 주세요';
+        'background:#081a26;color:#93b3c1;font-size:12px;font-weight:600;' +
+        'padding:6px 16px;text-align:center;letter-spacing:-.2px');
+      띠.textContent = (표.만든글 || '') + ' 기준 가격입니다 · '
+                     + '최종 금액은 예약처에서 확인해 주세요';
       document.body.insertBefore(띠, document.body.firstChild);
       위높이맞추기(띠);
     }).catch(function () {});

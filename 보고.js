@@ -71,7 +71,7 @@
       var 도 = 카.querySelector('.도시');
       return '결과 카드' + (도 ? ' · ' + 도.textContent.trim().slice(0, 20) : '');
     }
-    if (el.closest('.옆')) return '왼쪽 검색 조건';
+    if (el.closest('.히어로')) return '검색 칸';
     if (el.closest('.머리')) return '위쪽 바';
     if (el.closest('.본')) return '결과 칸';
     return '';
