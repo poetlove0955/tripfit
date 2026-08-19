@@ -26,7 +26,7 @@ async function 받아오기(환경, 어디, code) {
   const 비밀 = String(환경.KAKAO_CLIENT_SECRET || '').trim();
   if (비밀) 몸.set('client_secret', 비밀);       // 카카오 [보안] 에서 켠 경우에만
 
-  let 열쇠, 새로고침표;
+  let 열쇠, 새로고침표, 허락 = '';
   try {
     const r = await fetch('https://kauth.kakao.com/oauth/token', {
       method: 'POST',
@@ -39,6 +39,9 @@ async function 받아오기(환경, 어디, code) {
     }
     열쇠 = d.access_token;
     새로고침표 = d.refresh_token || '';
+    /* 카카오가 「무엇에 동의했는지」를 같이 준다. 🔔 알림을 보내려면
+       여기에 talk_message 가 있어야 한다 — 없으면 보내는 쪽이 404 로 튕긴다. */
+    허락 = String(d.scope || '');
   } catch (e) {
     return { 잘못: '카카오에 연결하지 못했습니다.' };
   }
@@ -55,7 +58,10 @@ async function 받아오기(환경, 어디, code) {
     if (!번호) return { 잘못: '카카오가 회원번호를 안 줬습니다.' };
     const 속 = d.properties || {};
     const 프 = (d.kakao_account || {}).profile || {};
-    return { 번호, 닉: String(속.nickname || 프.nickname || '').trim(), 새로고침표 };
+    return {
+      번호, 닉: String(속.nickname || 프.nickname || '').trim(), 새로고침표,
+      카톡: /(^|[ ,])talk_message([ ,]|$)/.test(허락),
+    };
   } catch (e) {
     return { 잘못: '카카오에 연결하지 못했습니다.' };
   }

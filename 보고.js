@@ -21,11 +21,27 @@
   var 받은것 = null;
 
   var 스타일 = [
-    '#tf보고{position:fixed;right:18px;bottom:18px;z-index:8900;width:44px;height:44px;',
-    '  border-radius:50%;border:1px solid #cfe0e3;background:#fff;color:#7d9298;',
-    '  font-size:19px;cursor:pointer;opacity:.55;transition:opacity .18s,transform .18s,border-color .18s;',
-    '  box-shadow:0 4px 14px rgba(0,0,0,.10);font-family:inherit;line-height:1}',
-    '#tf보고:hover{opacity:1;transform:translateY(-2px);border-color:#4aa8b8}',
+    '#tf보고{position:fixed;right:18px;bottom:18px;z-index:8900;height:40px;padding:0 14px 0 11px;',
+    '  display:flex;align-items:center;gap:6px;',
+    '  border-radius:999px;border:1px solid #cfe0e3;background:#fff;color:#7d9298;',
+    /* 🛑 transform 을 전이에 넣으면 안 된다. 비킬 자리를 고르려고 자리를 재는데,
+       전이가 도는 동안에는 **옛 자리**가 나와서 "어딜 가도 겹친다"가 된다.
+       (2026-08-21 실측 — 여덟 갈래를 다 재고도 늘 마지막 수단으로 떨어졌다) */
+    '  font-size:16px;cursor:pointer;opacity:.62;transition:opacity .18s,border-color .18s;',
+    '  box-shadow:0 4px 14px rgba(0,0,0,.10);font-family:inherit;line-height:1;',
+    /* 🛑 자리를 비켜야 해서 transform 이 **셋의 합**이다 — hover 가 통째로 덮어쓰면
+       비킨 자리가 원래대로 돌아와 다시 단추를 가린다. 그래서 변수로 나눠 둔다. */
+    '  transform:translate(var(--밀x,0px),calc(var(--밀y,0px) + var(--들림,0px)))}',
+    '#tf보고 .글{font-size:12.5px;font-weight:700;letter-spacing:-.3px}',
+    '#tf보고:hover{opacity:1;--들림:-2px;border-color:#4aa8b8;color:' + 색.브랜드 + '}',
+    /* 굴리는 동안에는 흐려지고 오른쪽 끝으로 반쯤 숨는다 — 손가락이 지나는 자리다 */
+    '#tf보고.뜀{opacity:.22;--밀x:16px}',
+    '#tf보고.뜀:hover{opacity:.5}',
+    /* 아무리 밀어도 빈자리를 못 찾았을 때: 오른쪽 끝에 반쯤 걸쳐 놓는다 */
+    '#tf보고.틈{opacity:.34;--밀x:34px}',
+    '#tf보고.틈:hover{opacity:1;--밀x:0px}',
+    /* 폰에서는 이름표를 접는다 — 아래쪽은 손가락이 지나는 자리라 넓으면 방해가 된다 */
+    '@media (max-width:520px){#tf보고{padding:0 12px}#tf보고 .글{display:none}}',
     '#tf보고 .종{position:absolute;top:-4px;right:-4px;min-width:18px;height:18px;padding:0 5px;',
     '  border-radius:9px;background:#e0554f;color:#fff;font-size:11px;font-weight:800;line-height:18px}',
     '#tf보고 .종[hidden]{display:none}',
@@ -33,7 +49,10 @@
     '  background:#fff;border:1px solid #dbe7e9;border-radius:14px;padding:14px;',
     '  box-shadow:0 16px 44px rgba(0,0,0,.18);font-family:inherit;color:#2b3a3d}',
     '#tf보고칸[hidden]{display:none}',
-    '#tf보고칸 .제{font-size:13px;font-weight:800;margin-bottom:2px}',
+    '#tf보고칸 .제{font-size:13px;font-weight:800;margin-bottom:2px;padding-right:22px}',
+    '#tf보고칸 .닫{position:absolute;top:8px;right:9px;border:none;background:none;',
+    '  font-size:17px;line-height:1;color:#9bb0b4;cursor:pointer;padding:4px;font-family:inherit}',
+    '#tf보고칸 .닫:hover{color:#2b3a3d}',
     '#tf보고칸 .자리{font-size:11px;color:#9bb0b4;margin-bottom:10px}',
     '#tf보고칸 .칩{display:flex;gap:5px;margin-bottom:9px}',
     '#tf보고칸 .칩 div{flex:1;text-align:center;padding:7px 3px;border-radius:9px;cursor:pointer;',
@@ -46,11 +65,13 @@
     '#tf보고칸 .줄 button{border:none;border-radius:9px;padding:9px;font-size:12.5px;',
     '  font-weight:700;font-family:inherit;cursor:pointer}',
     '#tf보고칸 .보냄{flex:1;background:' + 색.브랜드 + ';color:#fff}',
-    '#tf보고칸 .그만{background:#f2f6f7;color:#7d9298;padding:9px 13px}',
     '#tf보고칸 .탭{display:flex;gap:12px;border-bottom:1px solid #eef4f5;margin:-4px -4px 10px;padding:0 4px}',
     '#tf보고칸 .탭 b{font-size:12px;font-weight:700;color:#9bb0b4;padding:6px 0;cursor:pointer;',
     '  border-bottom:2px solid transparent}',
     '#tf보고칸 .탭 b.켬{color:' + 색.브랜드 + ';border-bottom-color:' + 색.브랜드 + '}',
+    /* 🛑 `display:flex` 는 `hidden` 을 이긴다 — 이 한 줄이 없으면 대표 전용
+       [📥 받은 것] 이 **손님 모두에게** 보인다 (눌러도 403 이라 '고장난 사이트'로 읽힌다). */
+    '#tf보고칸 .탭[hidden]{display:none}',
     '#tf받은{max-height:300px;overflow-y:auto;margin:-2px -4px 0;padding:0 4px}',
     '#tf받은 .건{border:1px solid #eef4f5;border-radius:10px;padding:9px 10px;margin-bottom:7px;font-size:12px}',
     '#tf받은 .건.안봄{border-color:#cfe0e3;background:#fbfdfd}',
@@ -91,15 +112,16 @@
 
     var 단 = document.createElement('button');
     단.id = 'tf보고';
-    단.title = '여기 뭐가 이상해요 (Ctrl+.)';
-    단.setAttribute('aria-label', '이상한 것 알려주기');
-    단.innerHTML = '🐞<span class="종" hidden></span>';
+    단.title = '불편한 점·이상한 값을 알려주세요 (Ctrl+.)';
+    단.setAttribute('aria-label', '불편한 점이나 이상한 값 알려주기');
+    단.innerHTML = '🐞<span class="글">알려주기</span><span class="종" hidden></span>';
     document.body.appendChild(단);
 
     var 칸 = document.createElement('div');
     칸.id = 'tf보고칸';
     칸.hidden = true;
     칸.innerHTML =
+      '<button class="닫" id="tf닫기" aria-label="닫기">✕</button>' +
       '<div class="탭" id="tf탭" hidden>' +
       '  <b data-쪽="쓰기" class="켬">✍ 알려주기</b><b data-쪽="받은">📥 받은 것</b>' +
       '</div>' +
@@ -115,14 +137,13 @@
       '    placeholder="한 줄이면 충분합니다. 예: 도쿄 값이 예약처와 다릅니다"></textarea>' +
       '  <div class="줄">' +
       '    <button class="보냄" id="tf보냄">보내기</button>' +
-      '    <button class="그만" id="tf그만">그만</button>' +
       '  </div>' +
       '</div>' +
       '<div id="tf받은" hidden></div>';
     document.body.appendChild(칸);
 
     단.onclick = function () { 칸.hidden ? 열기() : 닫기(); };
-    칸.querySelector('#tf그만').onclick = 닫기;
+    칸.querySelector('#tf닫기').onclick = 닫기;
     칸.querySelector('#tf종류').onclick = function (e) {
       var c = e.target.closest('[data-v]');
       if (!c) return;
@@ -146,6 +167,13 @@
     document.getElementById('tf자리').textContent =
       '여기 · ' + (커서.어디 || 'TripFit 화면');
     칸.hidden = false;
+    /* 🛑 칸은 단추 위에 붙는다 — 비켜 있는 채로 열면 칸이 화면 밖으로 나간다 */
+    var 단 = document.getElementById('tf보고');
+    if (단) {
+      단.classList.remove('뜀', '틈');
+      단.style.setProperty('--밀x', '0px');
+      단.style.setProperty('--밀y', '0px');
+    }
     if (대표인가()) { 받은가져오기(); }
     document.getElementById('tf글').focus();
   }
@@ -153,6 +181,105 @@
   function 닫기() {
     var 칸 = document.getElementById('tf보고칸');
     if (칸) 칸.hidden = true;
+    곧피하기();
+  }
+
+  /* ─────────────────────────────────────────── 🐞 가 단추를 가리지 않게
+
+     🛑 (2026-08-21 손님 신고) 오른쪽 아래에 붙박이로 앉아 있으니, 카드의
+        [상세보기] · [숙소 보기] 와 **늘 같은 자리**였다. 카드는 오른쪽 아래에
+        단추를 두는 판이라 "가끔 겹친다"가 아니라 **언제나 겹친다**.
+     ⭐ 그래서 자리를 옮기는 게 아니라 **비킨다.** 내 밑에 눌 수 있는 것이 있으면
+        위로 한 칸씩 물러나고, 그래도 없으면 오른쪽 끝에 반쯤 숨는다.
+     🛑 elementFromPoint 는 **맨 위에 있는 나 자신**을 돌려준다. 나를 빼고 봐야
+        밑에 뭐가 있는지 알 수 있다 (elementsFromPoint 로 층을 다 받아 걸러낸다).  */
+
+  var 눌리는것 = 'a,button,input,select,textarea,label,summary,[role="button"],[onclick],[tabindex]';
+  /* 🛑 (실측) 위로만 물러나면 소용이 없다 — 카드가 230px 마다 되풀이되는 판이라
+     56·112·168 을 올라가면 **다음 카드의 같은 단추** 위에 앉는다.
+     ⭐ 그래서 위로 두 칸만 재 보고 그다음엔 **왼쪽으로** 간다.
+        카드 왼쪽은 도시 이름·값이라 눌 것이 없다.                       */
+  var 물러나기 = [[0, 0], [0, -56], [0, -112],
+                [-96, 0], [-96, -56], [-190, 0], [-190, -56], [0, 56]];
+  var 잴틀 = null;
+
+  function 내것인가(e) {
+    return !!(e && e.closest && (e.closest('#tf보고') || e.closest('#tf보고칸')));
+  }
+
+  function 밑에단추(r) {
+    var 점 = [[r.left + 5, r.top + 5], [r.right - 5, r.top + 5],
+              [r.left + 5, r.bottom - 5], [r.right - 5, r.bottom - 5],
+              [(r.left + r.right) / 2, (r.top + r.bottom) / 2]];
+    for (var i = 0; i < 점.length; i++) {
+      var x = 점[i][0], y = 점[i][1];
+      if (x < 0 || y < 0 || x > innerWidth || y > innerHeight) continue;
+      var 층 = document.elementsFromPoint ? document.elementsFromPoint(x, y) : [];
+      for (var j = 0; j < 층.length; j++) {
+        var e = 층[j];
+        if (내것인가(e)) continue;
+        if (e.closest && e.closest(눌리는것)) return true;
+        break;                      // 내 것을 뺀 **맨 위 한 겹**만 본다
+      }
+    }
+    return false;
+  }
+
+  function 피하기() {
+    var 단 = document.getElementById('tf보고');
+    var 칸 = document.getElementById('tf보고칸');
+    if (!단 || !단.isConnected) return;
+    if (칸 && !칸.hidden) return;               // 칸이 열려 있으면 건드리지 않는다
+    if (!document.elementsFromPoint) return;    // 못 재는 곳에서는 그냥 둔다
+    단.classList.remove('틈');
+    단.style.setProperty('--밀x', '0px');
+    단.style.setProperty('--밀y', '0px');
+    var 밑 = 단.getBoundingClientRect();        // 제자리 (밀지 않은) 네모
+    /* 🛑 갈래마다 style 을 고치고 다시 재면 안 된다 — 브라우저가 그 사이에 그림을
+       다시 그리느라 **옛 자리**를 돌려준다. 자리는 셈으로 옮기고, 정한 뒤 한 번만 붙인다. */
+    for (var i = 0; i < 물러나기.length; i++) {
+      var dx = 물러나기[i][0], dy = 물러나기[i][1];
+      var 잰것 = {left: 밑.left + dx, right: 밑.right + dx,
+                 top: 밑.top + dy, bottom: 밑.bottom + dy};
+      if (밑에단추(잰것)) continue;
+      if (dx || dy) {
+        단.style.setProperty('--밀x', dx + 'px');
+        단.style.setProperty('--밀y', dy + 'px');
+      }
+      return;
+    }
+    단.classList.add('틈');                     // 빈자리가 없다 — 반쯤 숨는다
+  }
+
+  var 잼예약 = 0;
+  function 곧피하기() {
+    if (잼예약) return;
+    잼예약 = setTimeout(function () { 잼예약 = 0; 피하기(); }, 90);
+  }
+
+  var 뜀끄기 = 0;
+  function 구르는중() {
+    var 단 = document.getElementById('tf보고');
+    var 칸 = document.getElementById('tf보고칸');
+    if (!단 || (칸 && !칸.hidden)) return;
+    단.classList.add('뜀');
+    clearTimeout(뜀끄기);
+    뜀끄기 = setTimeout(function () {
+      단.classList.remove('뜀');
+      피하기();
+    }, 520);
+  }
+
+  function 피하기붙이기() {
+    addEventListener('scroll', 구르는중, {passive: true});
+    addEventListener('resize', 곧피하기, {passive: true});
+    addEventListener('orientationchange', 곧피하기, {passive: true});
+    /* 화면이 다시 그려지면(검색 결과가 들어오면) 밑에 있던 것이 바뀐다 */
+    if (window.MutationObserver) {
+      잴틀 = new MutationObserver(곧피하기);
+      잴틀.observe(document.body, {childList: true, subtree: true});
+    }
+    곧피하기();
   }
 
   function 쪽바꾸기(쪽) {
@@ -283,6 +410,7 @@
 
   document.addEventListener('DOMContentLoaded', function () {
     만들기();
+    피하기붙이기();
     /* 🛑 쪽지(트립핏로그인)만 믿지 않는다. 그게 이미 지나간 뒤에 우리가 그려지면
      *    대표인데도 받은함이 영영 안 열린다. 그릴 때 한 번 직접 물어본다. */
     if (대표인가()) {

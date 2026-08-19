@@ -18,6 +18,10 @@ export async function onRequestGet({ request, env }) {
   const 온길 = new URL(request.url);
   const 돌아갈 = 안전한길(온길.searchParams.get('돌아갈'));
   const 팝업 = 온길.searchParams.get('팝업') === '1';
+  /* 🔔 값 알림을 켜는 손님만 여기로 온다 — 카카오톡 [나에게 보내기] 추가 동의.
+   * 🛑 이걸 **로그인할 때 같이 받지 않는다.** 값만 보러 온 손님에게 처음부터
+   *    「메시지 보내기」 동의를 들이밀면 3초가 30초가 되고, 그 자리에서 나간다. */
+  const 카톡동의 = 온길.searchParams.get('동의') === 'talk';
 
   /* state — 우리가 보낸 손님이 맞는지 되돌아올 때 맞춰 보는 쪽지.
    * 🛑 이게 없으면 남이 만든 주소로 우리 문을 두드리게 할 수 있다 (CSRF).
@@ -32,6 +36,7 @@ export async function onRequestGet({ request, env }) {
     response_type: 'code',
     state: 표값,
   });
+  if (카톡동의) 묶음.set('scope', 'talk_message');
 
   return new Response(null, {
     status: 302,
