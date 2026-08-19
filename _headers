@@ -1,14 +1,5 @@
-/data/*
+/*
   Cache-Control: no-cache, must-revalidate
 
-/정적.js
-  Cache-Control: public, max-age=300
-
-/로그인.js
-  Cache-Control: public, max-age=300
-
-/보고.js
-  Cache-Control: public, max-age=300
-
-/index.html
+/data/*
   Cache-Control: no-cache, must-revalidate
