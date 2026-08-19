@@ -791,7 +791,7 @@ body{font-size:15.5px; letter-spacing:-.2px}
           <button class="칸" id="숙목적지버튼" onclick="곳고르기열기('숙박')">
             <span class="칸아이"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></span><b>어디든지</b></button>
           <button class="칸" id="숙언제칸" onclick="달력열기('숙박')">
-            <span class="칸아이"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="17" rx="2.5"/><path d="M16 2.5v4M8 2.5v4M3 10h18"/></svg></span><b id="숙언제칸글">1개월 이내</b></button>
+            <span class="칸아이"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="17" rx="2.5"/><path d="M16 2.5v4M8 2.5v4M3 10h18"/></svg></span><b id="숙언제칸글">6개월 이내</b></button>
           <button class="칸" id="숙며칠칸" onclick="달력열기('숙박')">
             <span class="칸아이"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span><b id="숙며칠칸글">1박</b></button>
           <button class="칸" id="숙사람칸" onclick="사람고르기열기('숙박')">
@@ -828,7 +828,7 @@ body{font-size:15.5px; letter-spacing:-.2px}
           <button class="칸" id="베언제칸" onclick="달력열기('베스트')">
             <span class="칸아이"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="17" rx="2.5"/><path d="M16 2.5v4M8 2.5v4M3 10h18"/></svg></span><b id="베언제칸글">6개월 이내</b></button>
           <button class="칸" id="베며칠칸" onclick="달력열기('베스트')">
-            <span class="칸아이"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span><b id="베며칠칸글">2박</b></button>
+            <span class="칸아이"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span><b id="베며칠칸글">1박</b></button>
           <button class="칸" id="베사람칸" onclick="사람고르기열기('베스트')">
             <span class="칸아이"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><b id="베사람칸글">성인 2명</b></button>
         </div>
@@ -1063,9 +1063,9 @@ body{font-size:15.5px; letter-spacing:-.2px}
   </div>
 </div>
 
-<script src="정적.js?v=20260819203442"></script>
-<script src="로그인.js?v=20260819203442"></script>
-<script src="보고.js?v=20260819203442"></script>
+<script src="정적.js?v=20260819204528"></script>
+<script src="로그인.js?v=20260819204528"></script>
+<script src="보고.js?v=20260819204528"></script>
 <script>
 /* 주소 밑동 — '/' 에 있든 '/tripfit/' 에 얹혀 있든 같은 코드로 돈다 */
 const 밑 = location.pathname.endsWith('/') ? location.pathname : location.pathname + '/';
@@ -1239,7 +1239,7 @@ function 달력열기(갈래) {
   모달갈래 = 갈래 || '항공';
   if (모달갈래 === '숙박') {
     임시시 = 숙시작; 임시끝 = 숙끝;
-    임시기간 = (숙언제값 === '직접') ? '한달' : 숙언제값; 임시박 = String(숙박값);
+    임시기간 = (숙언제값 === '직접') ? '여섯달' : 숙언제값; 임시박 = String(숙박값);
     달모드값 = (숙언제값 === '직접' && 숙시작) ? '지정' : '유연';
   } else if (모달갈래 === '베스트') {
     임시시 = 베시작; 임시끝 = 베끝;
@@ -1982,7 +1982,7 @@ function 빈화면(말) {
    항공권 쪽과 **같은 뼈대**로 돈다 — 조건 모으기 → /api/stay/search →
    /api/job/{id} 지켜보기 → 결과 그리기. 지켜보는 길이 같아서 코드가 거의 겹친다.
    다른 건 하나뿐: 숙박은 값 하나로 줄 세우지 않는다. **가성비가 기본 정렬**이다. */
-let 숙메타 = null, 숙언제값 = '한달', 숙박값 = 1, 숙고른곳 = new Set();
+let 숙메타 = null, 숙언제값 = '여섯달', 숙박값 = 1, 숙고른곳 = new Set();
 let 숙객 = {성인: 2, 아이나이: []}, 숙시작 = '', 숙끝 = '';
 let 숙줄들 = [], 숙보임 = [], 숙작업 = null, 숙도는중 = false;
 let 숙정렬값 = '추천', 숙종류값 = '*', 숙보이는수 = 30, 숙넘어옴 = null;
@@ -2575,7 +2575,7 @@ function 편집창() { window.open(밑 + 'edit', '_blank'); }
       (미리 만들어 둔 값을 맞는 척 흘리면 그때부터 화면이 거짓말을 한다)
    🛑 숙소는 값만 보고 고르지 않는다. 도미토리·1인 침대 값이 섞인 줄을 빼고,
       후기 8.0 이상(30건 이상)을 **먼저** 본 다음에야 값을 견준다.        */
-let 베언제값 = '여섯달', 베박값 = 2, 베시작 = '', 베끝 = '';
+let 베언제값 = '여섯달', 베박값 = 1, 베시작 = '', 베끝 = '';
 let 베객 = {성인: 2, 아이나이: []};
 let 베도는중 = false, 베줄들 = [], 베깼나 = false;
 const 베뺄종류 = ['호스텔', '캡슐 호텔', '게스트하우스', '민숙'];
